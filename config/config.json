@@ -1,5 +1,7 @@
 {
-  "development": {
+  "development": {    
+    "username": "postgres",
+    "password": "111",
     "database": "projects_api_development",
     "dialect": "postgres"
   },

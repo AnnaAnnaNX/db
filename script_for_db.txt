@@ -1,0 +1,5 @@
+npx sequelize-cli db:create
+
+npx sequelize-cli model:generate --name Products --attributes code1C:string,name:string,rightName:string,retailPrice:integer,purchasePrice:integer,supplierAgreementRatio:float,quantityGoodsAtSupplier:integer,quantityGoodsAtOurStore:integer,skuYm:string,linkToImage:string,description:string,categoryInOurShope:string,brand:string,barcode:string,widthCm:float,heightCm:float,depthCm:float,weightKg:float,artOzon:string,ndsOzon:string,commTypeOzon:string,modelName:string
+
+npx sequelize-cli db:migrate
