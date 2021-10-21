@@ -1,5 +1,11 @@
 const { Router } = require('express');
+
+const multer = require('multer');
+const upload = multer({ dest: './files' });
+
 const controllers = require('../controllers');
 const router = Router();
+
 router.get('/', (req, res) => res.send('This is root!'))
-module.exports = router
+router.post('/createProduct', upload.single('file1'), controllers.createProduct);
+module.exports = router;
