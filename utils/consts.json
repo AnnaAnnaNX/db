@@ -1,0 +1,13 @@
+{
+    "typeFilesWithFields": {
+        "ym": {
+            "dbFields": ["name", "retailPrice", "skuYm", "linkToImage",
+             "description", "categoryInOurShope", "brand", "barcode", 
+             "widthCm", "heightCm", "depthCm", "weightKg"],
+            "excelNumbersColumns": ["D", "Z", "X", "E", "F", "G", "H", "I", "J", "K"],
+            "tagName": "Ассортимент"
+        },
+        "ozon": ["field1", "field2"]
+
+    }
+}
