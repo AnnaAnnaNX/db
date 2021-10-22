@@ -1,0 +1,11 @@
+{
+    "typeFilesWithFields": {
+        "ym": {
+            "dbFields": ["field1", "field2"],
+            "excelNumbersColumns": [1,2],
+            "tagName": "Ассортимент"
+        },
+        "ozon": ["field1", "field2"]
+
+    }
+}
