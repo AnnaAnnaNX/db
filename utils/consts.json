@@ -5,7 +5,8 @@
              "description", "categoryInOurShope", "brand", "barcode", 
              "widthCm", "heightCm", "depthCm", "weightKg"],
             "excelNumbersColumns": ["D", "Z", "X", "E", "F", "G", "H", "I", "J", "K"],
-            "tagName": "Ассортимент"
+            "tagName": "Ассортимент",
+            "beginProductRowNumber": 5
         },
         "ozon": ["field1", "field2"]
 

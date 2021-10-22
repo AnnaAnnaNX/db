@@ -1,4 +1,5 @@
-const { Product } = require('../models');
+const { Products } = require('../models');
+
 const { getInfoFromFile } = require('../utils/helpers');
 
 const createProduct = async (req, res) => {
@@ -12,9 +13,10 @@ const createProduct = async (req, res) => {
         const content = await getInfoFromFile('ym', req.file);
 
         // bulk
-        const product = await Product.create(req.body);
+        const addedProducts = await Products.bulkCreate(content);
         return res.status(201).json({
-            product,
+            readFromFile: (content && content.length) || 0,
+            added: (addedProducts && addedProducts.length) || 0
         });
     } catch (error) {
         return res.status(500).json({ error: error.message })
