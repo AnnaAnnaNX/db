@@ -85,7 +85,32 @@ const createUmlYml = async (content) => {
     return xml2;
 }
 
+const createUmlOzon = async (content) => {
+    let offer = {offer: []};
+    const obj = {q2: {offers: offer}};
+
+    offer.offer = content.map((product) => {
+        const obj = {};
+        obj["@id"] = product.artOzon || 111;
+        obj.name = product.name;
+        obj.price = product.retailPrice;
+        obj.oldprice = 0;
+        obj.outlets = {
+            outlet: [
+                {'@instock': product.quantityGoodsAtOurStore || 0}
+            ]
+        };
+        return obj;
+    });
+    console.log(JSON.stringify(offer, null, 2));
+
+    const xml2 = json2xml(obj);
+    console.log(xml2);
+    return xml2;
+}
+
 module.exports = {
     getInfoFromFile,
-    createUmlYml
+    createUmlYml,
+    createUmlOzon
 }

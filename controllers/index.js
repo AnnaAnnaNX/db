@@ -3,7 +3,7 @@ const path = require('path');
 const { v1 } = require('uuid');
 const { Products } = require('../models');
 
-const { getInfoFromFile, createUmlYml } = require('../utils/helpers');
+const { getInfoFromFile, createUmlYml, createUmlOzon } = require('../utils/helpers');
 
 const createProduct = async (req, res) => {
     try {
@@ -38,7 +38,20 @@ const getUmlYml = async (req, res) => {
     }
 }
 
+const getUmlOzon = async (req, res) => {
+    try {
+        const content = await Products.findAll({ raw: true });
+        const xml = await createUmlOzon(content);
+        const pathToYml = path.resolve('files', `${v1()}.yml`);
+        await fs.promises.writeFile(pathToYml, xml);
+        res.download(pathToYml);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 module.exports = {
     createProduct,
-    getUmlYml
+    getUmlYml,
+    getUmlOzon
 }
