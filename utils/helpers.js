@@ -1,5 +1,6 @@
 const ExcelJS = require('exceljs');
 const { typeFilesWithFields } = require('./consts.json');
+const { json2xml } = require('./json2xml');
 
 const getInfoFromFile = async (type, file, fieldsNumberList) => {
     const fileInfo = typeFilesWithFields['ym'];
@@ -43,6 +44,48 @@ const getInfoFromFile = async (type, file, fieldsNumberList) => {
     return rows; 
 }
 
+const addCategoryId = (products) => {
+    const listCategories = products.map((el) => (el.categoryInOurShope));
+    let uniqueListCategories = [...new Set(listCategories)];
+
+    const productsWithCategoryId = products.map((product) => {
+        const id = uniqueListCategories.indexOf(product.categoryInOurShope) + 1;
+        return {
+            ...product,
+            categoryId: id
+        }
+    });
+    return {
+        categories: uniqueListCategories,
+        contentWithCategoryId: productsWithCategoryId
+    };
+}
+
+const createUmlYml = async (content) => {
+    let offer = {offer: []};
+    const obj = {q2: {offers: offer}};
+
+    const { categories, contentWithCategoryId } = addCategoryId(content);
+    // console.log(JSON.stringify(contentWithCategoryId, null, 2));
+
+    offer.offer = contentWithCategoryId.map((product) => {
+        const obj = {};
+        obj["@id"] = product.id;
+        obj.name = product.name;
+        obj.price = product.retailPrice;
+        obj.currencyId = 'RUR';
+        obj.categoryId = product.categoryId;
+        obj.count = product.quantityGoodsAtOurStore || 0;
+        return obj;
+    });
+    // console.log(JSON.stringify(offer, null, 2));
+
+    const xml2 = json2xml(obj);
+    console.log(xml2);
+    return xml2;
+}
+
 module.exports = {
-    getInfoFromFile
+    getInfoFromFile,
+    createUmlYml
 }
