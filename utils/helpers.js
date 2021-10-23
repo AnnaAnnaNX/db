@@ -87,7 +87,7 @@ const createUmlYml = async (content) => {
 
 const createUmlOzon = async (content) => {
     let offer = {offer: []};
-    const obj = {q2: {offers: offer}};
+    const obj = {yml_catalog: {shop: {offers: offer}}};
 
     offer.offer = content.map((product) => {
         const obj = {};
