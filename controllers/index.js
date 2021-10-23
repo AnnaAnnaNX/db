@@ -84,7 +84,14 @@ const createProduct = async (req, res) => {
 
 const getUmlYml = async (req, res) => {
     try {
-        const content = await Products.findAll({ raw: true });
+        const content = await Products.findAll({
+            raw: true,
+            where: {
+                skuYm: {
+                    [Op.ne]: null
+                }
+            }
+        });
         const xml = await createUmlYml(content);
         const pathToYml = path.resolve('files', `${v1()}.yml`);
         await fs.promises.writeFile(pathToYml, xml);
@@ -96,7 +103,14 @@ const getUmlYml = async (req, res) => {
 
 const getUmlOzon = async (req, res) => {
     try {
-        const content = await Products.findAll({ raw: true });
+        const content = await Products.findAll({
+            raw: true,
+            where: {
+                artOzon: {
+                    [Op.ne]: null
+                }
+            }
+        });
         const xml = await createUmlOzon(content);
         const pathToYml = path.resolve('files', `${v1()}.yml`);
         await fs.promises.writeFile(pathToYml, xml);

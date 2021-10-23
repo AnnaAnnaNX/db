@@ -126,7 +126,7 @@ const createUmlYml = async (content) => {
         obj.price = product.retailPrice;
         obj.currencyId = 'RUR';
         obj.categoryId = product.categoryId;
-        obj.count = product.quantityGoodsAtOurStore || 0;
+        obj.count = (product.quantityGoodsAtOurStore + product.quantityGoodsAtSupplier) || 0;
         return obj;
     });
     // console.log(JSON.stringify(offer, null, 2));
@@ -148,7 +148,7 @@ const createUmlOzon = async (content) => {
         obj.oldprice = 0;
         obj.outlets = {
             outlet: [
-                {'@instock': product.quantityGoodsAtOurStore || 0}
+                {'@instock': (product.quantityGoodsAtOurStore + product.quantityGoodsAtSupplier) || 0}
             ]
         };
         return obj;
