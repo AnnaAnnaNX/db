@@ -1,7 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const { v1 } = require('uuid');
+const { Op } = require('sequelize');
 const { Products } = require('../models');
+const { typeFilesWithFields } = require('../utils/consts.json');
 
 const {
     getInfoFromFile,
@@ -10,6 +12,7 @@ const {
     getTypeExcelFile
  } = require('../utils/helpers');
 
+// or update
 const createProduct = async (req, res) => {
     try {
         console.log(req.file);
@@ -26,7 +29,50 @@ const createProduct = async (req, res) => {
         const content = await getInfoFromFile(type, req.file);
 
         // bulk
-        const addedProducts = await Products.bulkCreate(content);
+        let addedProducts = null;
+        if ((type === 'ym') || (type === 'ozon')) {
+            const listFields = typeFilesWithFields[type].dbFields;
+            addedProducts = await Products.bulkCreate(content, {
+                fields: listFields, // listFields, 
+                updateOnDuplicate: ["name"]
+            });
+        } else if ((type === 'price_list') || (type === 'ost_baza')) {
+            // find product for update price and count
+            const codes = content.map((el) => (el.code));
+            console.log(`read from file - ${codes && codes.length}`);
+            const products = await Products.findAll({
+                raw: true,
+                where: {
+                    [Op.or]: [
+                        { skuYm: codes },
+                        { artOzon: codes }
+                    ]
+                }
+            });
+            console.log(`in db have - ${products && products.length}`);
+            // add price and count to products
+            const productsWithPriceAndCount = [...products].map((product) => {
+                const arr = content.filter((el) => ((el.code === product.skuYm) || (el.code === product.artOzon)));
+                if (arr && arr.length) {
+                    const obj = arr[0];
+                    return {
+                        ...product,
+                        quantityGoodsAtSupplier: obj.quantityGoodsAtSupplier,
+                        purchasePrice: obj.purchasePrice
+                    }
+                };
+            });
+            // update entities
+
+            addedProducts = await Products.bulkCreate(
+                productsWithPriceAndCount,
+                {
+                    fields: ["id", "quantityGoodsAtSupplier", "purchasePrice", "createdAt", "updatedAt"],
+                    updateOnDuplicate: ["id"]
+                }
+            );
+            console.log(`updated - ${addedProducts && addedProducts.length}`);
+        }
         return res.status(201).json({
             readFromFile: (content && content.length) || 0,
             added: (addedProducts && addedProducts.length) || 0

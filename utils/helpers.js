@@ -3,6 +3,24 @@ const ExcelJS = require('exceljs');
 const { typeFilesWithFields } = require('./consts.json');
 const { json2xml } = require('./json2xml');
 
+const format = (val, fieldName) => {
+    if (!val || (typeof val === 'number')) {
+        return val;
+    }
+    console.log(`val - ${val}`);
+    if ((fieldName === 'quantityGoodsAtOurStore')
+    || (fieldName === 'quantityGoodsAtSupplier')) {
+        const q = val.replace(/</gi, '').replace(/>/gi, '');
+        console.log(`q = ${q}`);
+        return parseInt(q, 10);
+    }
+    if ((fieldName === 'retailPrice')
+    || (fieldName === 'purchasePrice')) {
+        return  parseInt(val.replace(/ /gi, ''), 10);
+    }
+    return val;
+}
+
 const getInfoFromFile = async (type, file, fieldsNumberList) => {
     const fileInfo = typeFilesWithFields[type];
     const dbFields = fileInfo.dbFields;
@@ -22,26 +40,27 @@ const getInfoFromFile = async (type, file, fieldsNumberList) => {
     }
 
     let rows = [];
-    if (['ym', 'ozon'].includes(type)) {
+    if (['ym', 'ozon', 'price_list', 'ost_baza'].includes(type)) {
         if (extension === '.xlsx') {
             worksheet = await workbook.getWorksheet(tagName);
         }
 
         for (let i = 0; i < excelNumbersColumns.length; i++) {
             const column = excelNumbersColumns[i];
+            console.log(worksheet ? 'worksheet' : 'no worksheet');
             let vals = await worksheet.getColumn(column).values;
             vals = vals.slice(beginProductRowNumber);
             if (i === 0) {
                 rows = vals.map((el) => {
                     const obj = {};
                     const val = (el && el.richText && el.richText.text) || el;
-                    obj[dbFields[i]] = val;
+                    obj[dbFields[i]] = format(val, dbFields[i]);
                     return obj;
                 });
             } else {
                 rows = rows.map((obj, j) => {
                     const val = (vals[j] && vals[j].richText && vals[j].richText.text) || vals[j];
-                    obj[dbFields[i]] = val;
+                    obj[dbFields[i]] = format(val, dbFields[i]);
                     return obj;
                 });
             }

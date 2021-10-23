@@ -3,8 +3,8 @@
         "ym": {
             "dbFields": ["name", "retailPrice", "skuYm", "linkToImage",
              "description", "categoryInOurShope", "brand", "barcode", 
-             "widthCm", "heightCm", "depthCm", "weightKg"],
-            "excelNumbersColumns": ["D", "Z", "X", "E", "F", "G", "H", "I", "J", "K"],
+             "weightKg", "skuYm"],
+            "excelNumbersColumns": ["D", "Z", "X", "E", "F", "G", "H", "I", "K", "C"],
             "tagName": "Ассортимент",
             "beginProductRowNumber": 5
         },
@@ -15,20 +15,16 @@
             "beginProductRowNumber": 2
         },
         "price_list": {
-            "dbFields": ["name", "retailPrice", "skuYm", "linkToImage",
-             "description", "categoryInOurShope", "brand", "barcode", 
-             "widthCm", "heightCm", "depthCm", "weightKg"],
-            "excelNumbersColumns": ["D", "Z", "X", "E", "F", "G", "H", "I", "J", "K"],
+            "dbFields": ["code", "purchasePrice", "quantityGoodsAtSupplier"],
+            "excelNumbersColumns": ["A", "D", "E"],
             "tagName": "TDSheet",
-            "beginProductRowNumber": 5
+            "beginProductRowNumber": 17
         },
         "ost_baza": {
-            "dbFields": ["name", "retailPrice", "skuYm", "linkToImage",
-             "description", "categoryInOurShope", "brand", "barcode", 
-             "widthCm", "heightCm", "depthCm", "weightKg"],
-            "excelNumbersColumns": ["D", "Z", "X", "E", "F", "G", "H", "I", "J", "K"],
-            "tagName": "ost_baza",
-            "beginProductRowNumber": 5
+            "dbFields": ["code", "purchasePrice", "quantityGoodsAtSupplier"],
+            "excelNumbersColumns": ["B", "D", "E"],
+            "tagName": "Уютель LED+TL",
+            "beginProductRowNumber": 2
         }
     },
     "dbFieldsForYml": {
