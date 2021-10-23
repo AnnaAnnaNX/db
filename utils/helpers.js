@@ -63,11 +63,33 @@ const addCategoryId = (products) => {
 
 const createUmlYml = async (content) => {
     let offer = {offer: []};
-    const obj = {q2: {offers: offer}};
+    const obj = {yml_catalog: {offers: offer}};
+    obj.yml_catalog["@date"] = (new Date()).toISOString();
+
+    // header
+    obj.yml_catalog.name = 'BestSeller';
+    obj.yml_catalog.company = 'Tne Best inc.';
+    obj.yml_catalog.url = 'http://best.seller.ru';
+    obj.yml_catalog.currencies = {
+        currency: {
+            "@id": "RUR",
+            "@rate": "1"
+        }
+    };
 
     const { categories, contentWithCategoryId } = addCategoryId(content);
     // console.log(JSON.stringify(contentWithCategoryId, null, 2));
 
+    const categoryArr = categories.map((category, i) => {
+        return {
+            "@id": i+1,
+            "#text": category
+        };
+    })
+    obj.yml_catalog.categories = {
+        category: categoryArr
+    }
+    
     offer.offer = contentWithCategoryId.map((product) => {
         const obj = {};
         obj["@id"] = product.id;
@@ -82,7 +104,7 @@ const createUmlYml = async (content) => {
 
     const xml2 = json2xml(obj);
     console.log(xml2);
-    return xml2;
+    return `<?xml version="1.0" encoding="UTF-8"?>${xml2}`;
 }
 
 const createUmlOzon = async (content) => {
