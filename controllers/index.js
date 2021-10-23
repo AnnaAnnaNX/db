@@ -3,17 +3,27 @@ const path = require('path');
 const { v1 } = require('uuid');
 const { Products } = require('../models');
 
-const { getInfoFromFile, createUmlYml, createUmlOzon } = require('../utils/helpers');
+const {
+    getInfoFromFile,
+    createUmlYml,
+    createUmlOzon,
+    getTypeExcelFile
+ } = require('../utils/helpers');
 
 const createProduct = async (req, res) => {
     try {
         console.log(req.file);
 
-        // get type load file - 'ym', 'ozon', 'products', 'Ост_база'
-
+        // get type load file - 'ym', 'ozon', 'price_list', 'ost_baza'
+        const type = await getTypeExcelFile(req.file);
+        console.log('type');
+        console.log(type);
+        if (![ 'ym', 'ozon', 'price_list', 'ost_baza'].includes(type)) {
+            new Error('not defined type file');
+        }
 
         // get product info while type file
-        const content = await getInfoFromFile('ym', req.file);
+        const content = await getInfoFromFile(type, req.file);
 
         // bulk
         const addedProducts = await Products.bulkCreate(content);

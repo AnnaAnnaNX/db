@@ -1,21 +1,31 @@
+const path = require('path');
 const ExcelJS = require('exceljs');
 const { typeFilesWithFields } = require('./consts.json');
 const { json2xml } = require('./json2xml');
 
 const getInfoFromFile = async (type, file, fieldsNumberList) => {
-    const fileInfo = typeFilesWithFields['ym'];
+    const fileInfo = typeFilesWithFields[type];
     const dbFields = fileInfo.dbFields;
     const excelNumbersColumns = fileInfo.excelNumbersColumns;
     const tagName = fileInfo.tagName;
     const beginProductRowNumber = fileInfo.beginProductRowNumber;
       
-
+    let worksheet = null;
     const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.readFile(file.path);
+    const extension = path.extname(file.path);
+    if (extension === '.xlsx') {
+        await workbook.xlsx.readFile(file.path);
+    } else if (extension === '.csv') {
+        worksheet = await workbook.csv.readFile(file.path);
+    } else {
+        return;
+    }
 
     let rows = [];
-    if (type === 'ym') {
-        let worksheet = await workbook.getWorksheet(tagName);
+    if (['ym', 'ozon'].includes(type)) {
+        if (extension === '.xlsx') {
+            worksheet = await workbook.getWorksheet(tagName);
+        }
 
         for (let i = 0; i < excelNumbersColumns.length; i++) {
             const column = excelNumbersColumns[i];
@@ -131,8 +141,47 @@ const createUmlOzon = async (content) => {
     return xml2;
 }
 
+const getTypeExcelFile = async (file) => {
+    try {
+        const workbook = new ExcelJS.Workbook();
+        console.log('file.path');
+        console.log(file.path);
+        const extension = path.extname(file.path);
+        console.log('extension');
+        console.log(extension);
+        if (extension === '.xlsx') {
+            await workbook.xlsx.readFile(file.path);
+        } else if (extension === '.csv') {
+            await workbook.csv.readFile(file.path);
+            return 'ozon'; // csv-файл только у Ozon
+        } else {
+            return;
+        }
+        const arr = [];
+        workbook.eachSheet(function(worksheet) {
+            arr.push(worksheet.name); // не работает для csv
+        });
+        // TODO: брать из consts названия вкладок
+        if (arr.includes('Ассортимент')) {
+            return 'ym';
+        }
+        if (arr.includes('products')) {
+            return 'ozon';
+        }
+        if (arr.includes('TDSheet')) {
+            return 'price_list';
+        }
+        if (arr.includes('Уютель LED+TL')) {
+            return 'ost_baza';
+        }
+    } catch (e) {
+        return null;
+    }
+}
+
 module.exports = {
     getInfoFromFile,
     createUmlYml,
-    createUmlOzon
+    createUmlOzon,
+    getTypeExcelFile
 }

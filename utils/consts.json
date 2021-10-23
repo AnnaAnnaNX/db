@@ -8,7 +8,42 @@
             "tagName": "Ассортимент",
             "beginProductRowNumber": 5
         },
-        "ozon": ["field1", "field2"]
-
+        "ozon": {
+            "dbFields": ["name", "retailPrice", "brand", "barcode", "weightKg", "artOzon", "ndsOzon", "commTypeOzon"],
+            "excelNumbersColumns": ["F", "U", "G", "E", "P", "A", "Z", "N"],
+            "tagName": "products",
+            "beginProductRowNumber": 2
+        },
+        "price_list": {
+            "dbFields": ["name", "retailPrice", "skuYm", "linkToImage",
+             "description", "categoryInOurShope", "brand", "barcode", 
+             "widthCm", "heightCm", "depthCm", "weightKg"],
+            "excelNumbersColumns": ["D", "Z", "X", "E", "F", "G", "H", "I", "J", "K"],
+            "tagName": "TDSheet",
+            "beginProductRowNumber": 5
+        },
+        "ost_baza": {
+            "dbFields": ["name", "retailPrice", "skuYm", "linkToImage",
+             "description", "categoryInOurShope", "brand", "barcode", 
+             "widthCm", "heightCm", "depthCm", "weightKg"],
+            "excelNumbersColumns": ["D", "Z", "X", "E", "F", "G", "H", "I", "J", "K"],
+            "tagName": "ost_baza",
+            "beginProductRowNumber": 5
+        }
+    },
+    "dbFieldsForYml": {
+        "ym" : [
+        	"id",
+            "name",
+            "retailPrice",
+	        "category",
+	        "quantityGoodsAtOurStore"
+        ],
+        "ozon": [
+        	"artOzon",
+            "name",
+	        "retailPrice",
+	        "quantityGoodsAtOurStore"
+        ]
     }
 }
