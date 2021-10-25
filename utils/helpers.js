@@ -121,7 +121,7 @@ const createUmlYml = async (content) => {
     
     offer.offer = contentWithCategoryId.map((product) => {
         const obj = {};
-        obj["@id"] = product.id;
+        obj["@id"] = product.skuYm;
         obj.name = product.name;
         obj.price = product.retailPrice;
         obj.currencyId = 'RUR';
@@ -143,7 +143,7 @@ const createUmlOzon = async (content) => {
     offer.offer = content.map((product) => {
         const obj = {};
         obj["@id"] = product.artOzon || 111;
-        obj.name = product.name;
+        // obj.name = product.name;
         obj.price = product.retailPrice;
         obj.oldprice = 0;
         obj.outlets = {
