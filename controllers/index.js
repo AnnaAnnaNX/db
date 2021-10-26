@@ -120,8 +120,20 @@ const getUmlOzon = async (req, res) => {
     }
 }
 
+const getProducts = async (req, res) => {
+    try {
+        const content = await Products.findAll({
+            raw: true
+        });
+        res.status(200).json({ data: content });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 module.exports = {
     createProduct,
     getUmlYml,
-    getUmlOzon
+    getUmlOzon,
+    getProducts
 }
