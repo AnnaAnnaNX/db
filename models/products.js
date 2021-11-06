@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     widthCm: DataTypes.FLOAT,
     heightCm: DataTypes.FLOAT,
     depthCm: DataTypes.FLOAT,
-    weightKg: DataTypes.FLOAT,
+    weightKg: DataTypes.STRING,
     artOzon: DataTypes.STRING,
     ndsOzon: DataTypes.STRING,
     commTypeOzon: DataTypes.STRING,

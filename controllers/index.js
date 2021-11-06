@@ -31,10 +31,43 @@ const createProduct = async (req, res) => {
         // bulk
         let addedProducts = null;
         if ((type === 'ym') || (type === 'ozon')) {
+
+            const products = await Products.findAll({
+                raw: true
+            });
+
+            const idByNameObj = {};
+            products.forEach((product) => {
+                if (product
+                && product.id
+                && product.name) {
+                    const val = product.name && product.name.trim();
+                    idByNameObj[val] = product.id;
+                }
+            })
+            console.log('idByNameObj');
+            console.log(JSON.stringify(idByNameObj, null, 2));
+    
+            const contentWithId = content.map((el) => {
+                if (el && el.name) {
+                    const val = el.name && el.name.trim();
+                    if (idByNameObj[val]) {
+                        return {
+                            ...el,
+                            id: idByNameObj[val]
+                        }
+                    }
+                }
+                return el;
+            });
+
+            console.log('contentWithId');
+            console.log(JSON.stringify(contentWithId, null, 2));
+
             const listFields = typeFilesWithFields[type].dbFields;
-            addedProducts = await Products.bulkCreate(content, {
-                fields: listFields, // listFields, 
-                updateOnDuplicate: ["name"]
+            addedProducts = await Products.bulkCreate(contentWithId, {
+                fields: ['id', ...listFields], // listFields, 
+                updateOnDuplicate: listFields
             });
         } else if ((type === 'price_list') || (type === 'ost_baza')) {
             // find product for update price and count
@@ -58,7 +91,7 @@ const createProduct = async (req, res) => {
                     return {
                         ...product,
                         quantityGoodsAtSupplier: obj.quantityGoodsAtSupplier,
-                        purchasePrice: obj.purchasePrice
+                        retailPrice: obj.retailPrice
                     }
                 };
             });
@@ -67,8 +100,8 @@ const createProduct = async (req, res) => {
             addedProducts = await Products.bulkCreate(
                 productsWithPriceAndCount,
                 {
-                    fields: ["id", "quantityGoodsAtSupplier", "purchasePrice", "createdAt", "updatedAt"],
-                    updateOnDuplicate: ["id"]
+                    fields: ["id", "quantityGoodsAtSupplier", "retailPrice", "createdAt", "updatedAt"],
+                    updateOnDuplicate: ["quantityGoodsAtSupplier", "retailPrice", "createdAt", "updatedAt"]
                 }
             );
             console.log(`updated - ${addedProducts && addedProducts.length}`);

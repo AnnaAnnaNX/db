@@ -15,13 +15,13 @@
             "beginProductRowNumber": 2
         },
         "price_list": {
-            "dbFields": ["code", "purchasePrice", "quantityGoodsAtSupplier"],
+            "dbFields": ["code", "retailPrice", "quantityGoodsAtSupplier"],
             "excelNumbersColumns": ["A", "D", "E"],
             "tagName": "TDSheet",
             "beginProductRowNumber": 17
         },
         "ost_baza": {
-            "dbFields": ["code", "purchasePrice", "quantityGoodsAtSupplier"],
+            "dbFields": ["code", "retailPrice", "quantityGoodsAtSupplier"],
             "excelNumbersColumns": ["B", "D", "E"],
             "tagName": "Уютель LED+TL",
             "beginProductRowNumber": 2
