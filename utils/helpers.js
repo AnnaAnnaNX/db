@@ -2,6 +2,7 @@ const path = require('path');
 const ExcelJS = require('exceljs');
 const { typeFilesWithFields } = require('./consts.json');
 const { json2xml } = require('./json2xml');
+const { Providers } = require('../models');
 
 const format = (val, fieldName) => {
     if (!val || (typeof val === 'number')) {
@@ -9,7 +10,8 @@ const format = (val, fieldName) => {
     }
     console.log(`val - ${val}`);
     if ((fieldName === 'quantityGoodsAtOurStore')
-    || (fieldName === 'quantityGoodsAtSupplier')) {
+    || (fieldName === 'quantityGoodsAtSupplier')
+    || (fieldName === 'count')) {
         const q = val.replace(/</gi, '').replace(/>/gi, '');
         console.log(`q = ${q}`);
         return parseInt(q, 10);
@@ -19,6 +21,81 @@ const format = (val, fieldName) => {
         return  parseInt(val.replace(/ /gi, ''), 10);
     }
     return val;
+}
+
+const getInfoFromAllFile = async (idProvider, file) => {
+    console.log('getInfoFromAllFile');
+      
+    const params = await Providers.findOne({
+        where: {
+            id: idProvider
+        }
+    });
+
+    if (!params) {
+        throw new Error('not found params');
+    }
+
+    let worksheet = null;
+    const workbook = new ExcelJS.Workbook();
+    const extension = path.extname(file.path);
+    if (extension === '.xlsx') {
+        await workbook.xlsx.readFile(file.path);
+    } else if (extension === '.csv') {
+        worksheet = await workbook.csv.readFile(file.path);
+    } else {
+        return;
+    }
+
+    let rows = [];
+    if (extension === '.xlsx') {
+        worksheet = await workbook.getWorksheet(params.tabName);
+    }
+
+    const dbFields = [
+        'idProductProvider',
+        'name',
+        'price',
+        'count'
+    ];
+
+    const excelNumbersColumns = [
+        params.columnInnerId,
+        params.columnName,
+        params.columnPrice,
+        params.columnCountProduct
+    ];
+    for (let i = 0; i < excelNumbersColumns.length; i++) {
+        const column = excelNumbersColumns[i];
+        console.log(worksheet ? 'worksheet' : 'no worksheet');
+        let vals = await worksheet.getColumn(column).values;
+        vals = vals.slice(params.row);
+        if (i === 0) {
+            rows = vals.map((el) => {
+                const obj = {};
+                const val = (el && el.richText && el.richText.text) || el;
+                obj[dbFields[i]] = format(val, dbFields[i]);
+                return obj;
+            });
+        } else {
+            rows = rows.map((obj, j) => {
+                const val = (vals[j] && vals[j].richText && vals[j].richText.text) || vals[j];
+                obj[dbFields[i]] = format(val, dbFields[i]);
+                return obj;
+            });
+        }
+    }
+    rows = rows.map((obj, j) => {
+        obj.idProvider = idProvider;
+        return obj;
+    });
+    rows = rows.filter((el) => (el));
+    console.log(JSON.stringify(rows, null, 2));
+ 
+    
+
+    return rows; 
+
 }
 
 const getInfoFromFile = async (type, file, fieldsNumberList) => {
@@ -202,5 +279,6 @@ module.exports = {
     getInfoFromFile,
     createUmlYml,
     createUmlOzon,
-    getTypeExcelFile
+    getTypeExcelFile,
+    getInfoFromAllFile
 }

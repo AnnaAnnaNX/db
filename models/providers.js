@@ -17,10 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     nameProvider: DataTypes.STRING,
     row: DataTypes.INTEGER,
     tabName: DataTypes.STRING,
-    columnNumInnerId: DataTypes.INTEGER,
-    columnNumName: DataTypes.INTEGER,
-    columnNumPrice: DataTypes.INTEGER,
-    columnNumCountProduct: DataTypes.INTEGER,
+    columnInnerId: DataTypes.STRING,
+    columnName: DataTypes.STRING,
+    columnPrice: DataTypes.STRING,
+    columnCountProduct: DataTypes.STRING,
     otherFieldWithColumnNum: DataTypes.TEXT
   }, {
     sequelize,
