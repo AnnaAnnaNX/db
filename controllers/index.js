@@ -115,6 +115,79 @@ const createProduct = async (req, res) => {
     }
 }
 
+const readYmOrOzonExcel = async (req, res) => {
+    try {
+        console.log('readYmOrOzonExcel');
+        console.log(req.file);
+
+        // get type load file - 'ym', 'ozon', 'price_list', 'ost_baza'
+        const type = await getTypeExcelFile(req.file);
+        console.log('type');
+        console.log(type);
+        if (![ 'ym', 'ozon', 'price_list', 'ost_baza'].includes(type)) {
+            new Error('not defined type file');
+        }
+
+        // get product info while type file
+        const content = await getInfoFromFile(type, req.file);
+
+        // bulk
+        let addedProducts = null;
+        if ((type === 'ym') || (type === 'ozon')) {
+
+            const products = await Products.findAll({
+                raw: true
+            });
+
+            const idByNameObj = {};
+            products.forEach((product) => {
+                if (product
+                && product.id
+                && product.name) {
+                    const val = product.name && product.name.trim();
+                    idByNameObj[val] = product.id;
+                }
+            })
+            console.log('idByNameObj');
+            console.log(JSON.stringify(idByNameObj, null, 2));
+    
+            const contentWithId = content.map((el) => {
+                if (el && el.name) {
+                    const val = el.name && el.name.trim();
+                    if (idByNameObj[val]) {
+                        return {
+                            ...el,
+                            id: idByNameObj[val]
+                        }
+                    }
+                }
+                return el;
+            });
+
+            console.log('contentWithId');
+            console.log(JSON.stringify(contentWithId, null, 2));
+
+            const listFields = typeFilesWithFields[type].dbFields;
+            return res.status(201).json({
+                listFields,
+                contentWithId
+            });
+            // addedProducts = await Products.bulkCreate(contentWithId, {
+            //     fields: ['id', ...listFields], // listFields, 
+            //     updateOnDuplicate: listFields
+            // });
+        } else {
+            throw new Error('wrong type file, required ym or ozon');
+        }
+        // return res.status(201).json({
+        //     readFromFile: (content && content.length) || 0,
+        //     added: (addedProducts && addedProducts.length) || 0
+        // });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 const getUmlYml = async (req, res) => {
     try {
         const content = await Products.findAll({
@@ -166,6 +239,7 @@ const getProducts = async (req, res) => {
 
 module.exports = {
     createProduct,
+    readYmOrOzonExcel,
     getUmlYml,
     getUmlOzon,
     getProducts

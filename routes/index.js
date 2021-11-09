@@ -13,11 +13,15 @@ var storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const controllers = require('../controllers');
+const providerController = require('../controllers/providers');
 const router = Router();
 
 router.get('/', (req, res) => res.send('This is root!'))
 router.post('/createProduct', upload.single('file1'), controllers.createProduct);
+router.post('/readYmOrOzonExcel', upload.single('file1'), controllers.readYmOrOzonExcel);
 router.get('/getUmlYml', controllers.getUmlYml);
 router.get('/getUmlOzon', controllers.getUmlOzon);
 router.get('/getProducts', controllers.getProducts);
+router.get('/getProviders', providerController.getProviders);
+router.post('/newProvider', providerController.newProvider);
 module.exports = router;
