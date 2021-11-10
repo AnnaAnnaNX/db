@@ -2,10 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const { v1 } = require('uuid');
 const { Op } = require('sequelize');
-const { Providers, ProvidersProducts } = require('../models');
+const { Providers, ProvidersProducts, MainProducts } = require('../models');
 const { typeFilesWithFields } = require('../utils/consts.json');
 const { getInfoFromAllFile } = require('../utils/helpers');
 const { traceDeprecation } = require('process');
+const mainProducts = require('../models/mainProducts');
 
 const readProviderFile = async (req, res) => {
     console.log('readProviderFile');
@@ -81,8 +82,45 @@ const getProviderProducts = async (req, res) => {
     }
 }
 
+const addLink = async (req, res) => {
+    console.log('addLink');
+    try {
+        const idProvider = req.body && req.body.idProvider;
+        const idProductProvider = req.body && req.body.idProductProvider;
+        let idMainProduct = req.body && req.body.idMainProduct;
+        if (!idMainProduct) {
+            const result = await MainProducts.create(
+                { name: 'test' },
+                { raw: true }
+            );
+            console.log(result);
+            idMainProduct = result.dataValues && result.dataValues.id;
+            console.log(idMainProduct);
+        }
+        if (!idProvider || !idProductProvider || !idMainProduct) {
+            throw new Error('not values');
+        }
+        const providersProduct = await ProvidersProducts.findOne({
+            where: {
+                idProvider,
+                idProductProvider
+            }
+        });
+        const id = providersProduct && providersProduct.dataValues && providersProduct.dataValues.id;
+        await ProvidersProducts.update({
+            idMainProduct
+        }, {
+            where: {id: id}
+        });
+        res.status(200);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 module.exports = {
     readProviderFile,
     addProviderProducts,
-    getProviderProducts
+    getProviderProducts,
+    addLink
 }

@@ -14,7 +14,7 @@ const upload = multer({ storage });
 
 const controllers = require('../controllers');
 const providerController = require('../controllers/providers');
-const productsController = require('../controllers/products');
+const mainProductsController = require('../controllers/mainProducts');
 const providerProductsController = require('../controllers/providerProducts');
 const router = Router();
 
@@ -29,6 +29,8 @@ router.post('/newProvider', providerController.newProvider);
 router.post('/readProviderFile', upload.single('file1'), providerProductsController.readProviderFile);
 router.post('/addProviderProducts', providerProductsController.addProviderProducts);
 router.get('/getProviderProducts', providerProductsController.getProviderProducts);
-router.get('/getMainProducts', productsController.getMainProducts);
+router.get('/getMainProducts', mainProductsController.getMainProducts);
+router.post('/addLink', providerProductsController.addLink);
+
 
 module.exports = router;
