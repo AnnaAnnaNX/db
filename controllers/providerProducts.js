@@ -70,7 +70,19 @@ const addProviderProducts = async (req, res) => {
     }
 }
 
+const getProviderProducts = async (req, res) => {
+    try {
+        const content = await ProvidersProducts.findAll({
+            raw: true
+        });
+        res.status(200).json({ data: content });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 module.exports = {
     readProviderFile,
-    addProviderProducts
+    addProviderProducts,
+    getProviderProducts
 }
