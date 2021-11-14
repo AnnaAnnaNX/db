@@ -50,8 +50,20 @@ const addProviderProducts = async (req, res) => {
         });
         const objKeys = Object.keys(obj);
 
+        const provider = await Providers.findOne({
+            where: {
+                id: idProvider
+            }
+        });
+        const providerName = provider && provider.nameProvider;
+        console.log('providerName');
+        console.log(providerName);
+
         let updateCount = 0;
-        rows.map((el) => {
+        rows.map((el) => {            
+            if (providerName === 'markup') {
+                el.idMainProduct = parseInt(el.idProductProvider, 10);
+            }
             if (objKeys.includes((el.idProductProvider).toString())) {
                 updateCount++;
                 return {
