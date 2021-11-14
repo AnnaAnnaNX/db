@@ -40,6 +40,26 @@ module.exports = {
         updatedAt: '2021-11-10 07:26:03.623+03'
       },
 
+      
+      {
+        nameProvider: 'Поставщик Ост база',
+        row: 2,
+        tabName: 'Уютель LED+TL',
+        fieldsNames: JSON.stringify(["innerId","name","price","count"]),
+        fieldsSymbols: JSON.stringify(["B","C","D","E"]),
+        createdAt: '2021-11-10 07:26:03.623+03',
+        updatedAt: '2021-11-10 07:26:03.623+03'
+      },
+      {
+        nameProvider: 'Поставщик Elvan design',
+        row: 17,
+        tabName: 'TDSheet',
+        fieldsNames: JSON.stringify(["innerId","name","price","count"]),
+        fieldsSymbols: JSON.stringify(["A","B","D","E"]),
+        createdAt: '2021-11-10 07:26:03.623+03',
+        updatedAt: '2021-11-10 07:26:03.623+03'
+      },
+
   ], {});
     /**
      * Add seed commands here.

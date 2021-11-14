@@ -42,6 +42,8 @@ const addProviderProducts = async (req, res) => {
                 idProvider
             }
         });
+        console.log('existanceProduct');
+        console.log(JSON.stringify(existanceProduct));
         const obj = {};
         existanceProduct.forEach((el) => {
             obj[el.idProductProvider] = el.id;
@@ -50,11 +52,11 @@ const addProviderProducts = async (req, res) => {
 
         let updateCount = 0;
         rows.map((el) => {
-            if (objKeys.includes(el.idProductProvider)) {
+            if (objKeys.includes((el.idProductProvider).toString())) {
                 updateCount++;
                 return {
                     ...el,
-                    id: obj[el.idProductProvider]
+                    id: (obj[(el.idProductProvider).toString()])
                 }
             }
             return el;
