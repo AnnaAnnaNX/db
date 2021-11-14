@@ -52,19 +52,26 @@ const getInfoFromAllFile = async (idProvider, file) => {
         worksheet = await workbook.getWorksheet(params.tabName);
     }
 
-    const dbFields = [
-        'idProductProvider',
-        'name',
-        'price',
-        'count'
-    ];
+    const dbFields = params.fieldsNames
+    && JSON.parse(params.fieldsNames);
 
-    const excelNumbersColumns = [
-        params.columnInnerId,
-        params.columnName,
-        params.columnPrice,
-        params.columnCountProduct
-    ];
+    // const dbFields = [
+    //     'idProductProvider',
+    //     'name',
+    //     'price',
+    //     'count'
+    // ];
+
+    const excelNumbersColumns = params.fieldsSymbols
+    && JSON.parse(params.fieldsSymbols);
+
+    // const excelNumbersColumns = [
+    //     params.columnInnerId,
+    //     params.columnName,
+    //     params.columnPrice,
+    //     params.columnCountProduct
+    // ];
+    
     for (let i = 0; i < excelNumbersColumns.length; i++) {
         const column = excelNumbersColumns[i];
         console.log(worksheet ? 'worksheet' : 'no worksheet');

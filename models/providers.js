@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   Providers.init({
     nameProvider: DataTypes.STRING,
     row: DataTypes.INTEGER,
+    fieldsNames: DataTypes.STRING,
+    fieldsSymbols: DataTypes.STRING,
+
     tabName: DataTypes.STRING,
     columnInnerId: DataTypes.STRING,
     columnName: DataTypes.STRING,
