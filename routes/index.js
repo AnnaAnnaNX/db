@@ -31,6 +31,7 @@ router.post('/addProviderProducts', providerProductsController.addProviderProduc
 router.get('/getProviderProducts', providerProductsController.getProviderProducts);
 router.get('/getMainProducts', mainProductsController.getMainProducts);
 router.post('/addLink', providerProductsController.addLink);
+router.post('/writeRowsInExcel', mainProductsController.writeRowsInExcel);
 
 
 module.exports = router;
