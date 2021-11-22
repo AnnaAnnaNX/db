@@ -49,7 +49,7 @@ const getInfoFromAllFile = async (idProvider, file) => {
 
     let rows = [];
     if (extension === '.xlsx') {
-        worksheet = await workbook.getWorksheet(params.tabName);
+        worksheet = await workbook.getWorksheet('Ассортимент');
     }
 
     const dbFields = params.fieldsNames
