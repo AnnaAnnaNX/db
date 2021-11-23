@@ -49,7 +49,7 @@ const getInfoFromAllFile = async (idProvider, file) => {
 
     let rows = [];
     if (extension === '.xlsx') {
-        worksheet = await workbook.getWorksheet('Ассортимент');
+        worksheet = await workbook.getWorksheet(params.tabName || 'Ассортимент');
     }
 
     const dbFields = params.fieldsNames
@@ -205,15 +205,16 @@ const createUmlYml = async (content) => {
     
     offer.offer = contentWithCategoryId.map((product) => {
         const obj = {};
-        obj["@id"] = product.skuYm;
-        obj.name = product.name;
-        obj.price = product.retailPrice;
+        obj["@id"] = product.YMId;
+        obj.name = product.YMName;
+        obj.price = product.newPrice;
         obj.currencyId = 'RUR';
         obj.categoryId = product.categoryId;
-        obj.count = (product.quantityGoodsAtOurStore + product.quantityGoodsAtSupplier) || 0;
+        // obj.count = (product.quantityGoodsAtOurStore + product.quantityGoodsAtSupplier) || 0;
         return obj;
     });
-    // console.log(JSON.stringify(offer, null, 2));
+    console.log(JSON.stringify(offer, null, 2));
+    console.log(JSON.stringify(obj, null, 2));
 
     const xml2 = json2xml(obj);
     console.log(xml2);

@@ -7,8 +7,8 @@ module.exports = {
         nameProvider: 'YM',
         row: 5,
         tabName: 'Ассортимент',
-        fieldsNames: JSON.stringify(['innerId', 'name', 'barcode']),
-        fieldsSymbols: JSON.stringify(['C', 'D', 'I']),
+        fieldsNames: JSON.stringify(['innerId', 'name', 'barcode', 'categoryInOurShope']),
+        fieldsSymbols: JSON.stringify(['C', 'D', 'I', 'G']),
         createdAt: '2021-11-10 07:26:03.623+03', // TODO: now()
         updatedAt: '2021-11-10 07:26:03.623+03'
       },

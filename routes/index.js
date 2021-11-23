@@ -33,5 +33,13 @@ router.get('/getMainProducts', mainProductsController.getMainProducts);
 router.post('/addLink', providerProductsController.addLink);
 router.post('/writeRowsInExcel', mainProductsController.writeRowsInExcel);
 router.post('/writeMarkupInExcel', mainProductsController.writeMarkupInExcel);
+router.get('/getAssort', async (req, res) => {
+    try {
+        const result = await providerProductsController.getAssort();
+        res.status(200).json(result);
+    } catch (e) {
+        return res.status(500).json({ error: error.message });
+    }
+});
 
 module.exports = router;

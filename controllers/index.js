@@ -4,6 +4,7 @@ const { v1 } = require('uuid');
 const { Op } = require('sequelize');
 const { Products } = require('../models');
 const { typeFilesWithFields } = require('../utils/consts.json');
+const providerProductsController = require('../controllers/providerProducts');
 
 const {
     getInfoFromFile,
@@ -190,17 +191,28 @@ const readYmOrOzonExcel = async (req, res) => {
 
 const getUmlYml = async (req, res) => {
     try {
-        const content = await Products.findAll({
-            raw: true,
-            where: {
-                skuYm: {
-                    [Op.ne]: null
-                }
-            }
-        });
-        const xml = await createUmlYml(content);
-        const pathToYml = path.resolve('files', `${v1()}.yml`);
-        await fs.promises.writeFile(pathToYml, xml);
+        // const content = await Products.findAll({
+        //     raw: true,
+        //     where: {
+        //         skuYm: {
+        //             [Op.ne]: null
+        //         }
+        //     }
+        // });
+
+        console.log(1);
+        const result = await providerProductsController.getAssort();console.log(2);
+        const assort = result && result.rows;
+        console.log(3);
+        console.log(assort);
+        // оставить в ассортименте только товары в SKU YM
+        const content = assort.filter((obj) => (obj.YMId));console.log(5);
+        console.log('content');console.log(6);
+        console.log(content);
+
+        const xml = await createUmlYml(content);console.log(7);
+        const pathToYml = path.resolve('files', `${v1()}.yml`);console.log(8);
+        await fs.promises.writeFile(pathToYml, xml);console.log(9);
         res.download(pathToYml);
     } catch (error) {
         return res.status(500).json({ error: error.message });
