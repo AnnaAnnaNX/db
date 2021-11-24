@@ -33,7 +33,7 @@ module.exports = {
       {
         nameProvider: 'markup',
         row: 2,
-        tabName: 'Лист1',
+        tabName: 'Ассортимент',
         fieldsNames: JSON.stringify(['innerId', 'name', 'markup']),
         fieldsSymbols: JSON.stringify(['A', 'B', 'E']),
         createdAt: '2021-11-10 07:26:03.623+03',

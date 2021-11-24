@@ -199,20 +199,22 @@ const getUmlYml = async (req, res) => {
         //         }
         //     }
         // });
-
-        console.log(1);
-        const result = await providerProductsController.getAssort();console.log(2);
+       
+        const result = await providerProductsController.getAssort();
         const assort = result && result.rows;
-        console.log(3);
+        
         console.log(assort);
         // оставить в ассортименте только товары в SKU YM
-        const content = assort.filter((obj) => (obj.YMId));console.log(5);
+        const content = assort.filter((obj) => (obj.YMId && obj.newPrice));
+        if (!content || (content.length === 0)) {
+            return res.status(500).json({ error: 'нет товаров для выгрузки' });
+        } 
         console.log('content');console.log(6);
         console.log(content);
 
-        const xml = await createUmlYml(content);console.log(7);
-        const pathToYml = path.resolve('files', `${v1()}.yml`);console.log(8);
-        await fs.promises.writeFile(pathToYml, xml);console.log(9);
+        const xml = await createUmlYml(content);
+        const pathToYml = path.resolve('files', `${v1()}.yml`);
+        await fs.promises.writeFile(pathToYml, xml);
         res.download(pathToYml);
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -221,14 +223,26 @@ const getUmlYml = async (req, res) => {
 
 const getUmlOzon = async (req, res) => {
     try {
-        const content = await Products.findAll({
-            raw: true,
-            where: {
-                artOzon: {
-                    [Op.ne]: null
-                }
-            }
-        });
+        // const content = await Products.findAll({
+        //     raw: true,
+        //     where: {
+        //         artOzon: {
+        //             [Op.ne]: null
+        //         }
+        //     }
+        // });
+        const result = await providerProductsController.getAssort();
+        const assort = result && result.rows;
+
+        const content = assort.filter((obj) => (obj.OzonId && obj.newPrice));
+
+        if (!content || (content.length === 0)) {
+            return res.status(500).json({ error: 'нет товаров для выгрузки' });
+        }
+        
+        console.log('content');
+        console.log(content);
+
         const xml = await createUmlOzon(content);
         const pathToYml = path.resolve('files', `${v1()}.yml`);
         await fs.promises.writeFile(pathToYml, xml);
