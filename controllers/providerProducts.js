@@ -75,12 +75,31 @@ const addProviderProducts = async (req, res) => {
             return el;
         });
 
-        await ProvidersProducts.bulkCreate(rows);
+        
+        const resultMainProducts = await MainProducts.bulkCreate(rows.map(() => ({name: 'test'})));
+        console.log('resultMainProducts');
+        console.log(resultMainProducts);
+        const newRows = [];
+        resultMainProducts.forEach((el, i) => {
+            newRows.push({
+                ...rows[i],
+                idMainProduct: el && el.dataValues && el.dataValues.id
+            });
+        });
+        console.log('newRows');
+        console.log(newRows);
+        const result = await ProvidersProducts.bulkCreate(newRows);
+        console.log('result');
+        console.log(result);
+
+        if (req.body.newMainProduct) {
+
+        }
+
         res.json( {
             created: rows.length - updateCount,
             updated: updateCount
         });
-
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
