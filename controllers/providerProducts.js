@@ -100,6 +100,7 @@ const getProviderProducts = async (req, res) => {
 const addLink = async (req, res) => {
     console.log('addLink');
     try {
+        console.log(req.body);
         const idProvider = req.body && req.body.idProvider;
         const idProductProvider = req.body && req.body.idProductProvider;
         let idMainProduct = req.body && req.body.idMainProduct;
@@ -122,12 +123,15 @@ const addLink = async (req, res) => {
             }
         });
         const id = providersProduct && providersProduct.dataValues && providersProduct.dataValues.id;
+        
+        console.log(`id ${id}`);
         await ProvidersProducts.update({
             idMainProduct
         }, {
             where: {id: id}
         });
-        res.status(200);
+        console.log(222);
+        res.status(200).json({});
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
