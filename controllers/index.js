@@ -207,7 +207,7 @@ const getUmlYml = async (req, res) => {
         // оставить в ассортименте только товары в SKU YM
         const content = assort.filter((obj) => (obj.YMId && obj.newPrice));
         if (!content || (content.length === 0)) {
-            return res.status(500).json({ error: 'нет товаров для выгрузки' });
+            return res.status(500).json({ error: 'нет товаров для выгрузки или не установлена для них новая цена' });
         } 
         console.log('content');console.log(6);
         console.log(content);
@@ -237,7 +237,7 @@ const getUmlOzon = async (req, res) => {
         const content = assort.filter((obj) => (obj.OzonId && obj.newPrice));
 
         if (!content || (content.length === 0)) {
-            return res.status(500).json({ error: 'нет товаров для выгрузки' });
+            return res.status(500).json({ error: 'нет товаров для выгрузки или не установлена для них новая цена' });
         }
         
         console.log('content');

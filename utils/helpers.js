@@ -207,6 +207,7 @@ const createUmlYml = async (content) => {
         const obj = {};
         obj["@id"] = product.YMId;
         obj.name = product.YMName;
+        obj.picture = product.linkOnImage || '';
         obj.price = product.newPrice;
         obj.currencyId = 'RUR';
         obj.categoryId = product.categoryId;

@@ -205,8 +205,12 @@ const getAssort = async () => {
                 obj[el.idMainProduct]['categoryInOurShope'] = values && values[n];
                 
                 n = fieldsNames.indexOf('name');
-                 values = el.values && JSON.parse(el.values);
+                values = el.values && JSON.parse(el.values);
                 obj[el.idMainProduct]['YMName'] = values && values[n];
+                
+                n = fieldsNames.indexOf('linkOnImage');
+                values = el.values && JSON.parse(el.values);
+                obj[el.idMainProduct]['linkOnImage'] = values && values[n];
               } else
               if (nameProviderIdProviderObj['Ozon'] &&
                 (el.idProvider === nameProviderIdProviderObj['Ozon'].id)) {
