@@ -8,7 +8,8 @@
     "serve": "nodemon server.js",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "db:delete": "npx sequelize-cli db:drop && npx sequelize-cli db:create",
-    "db:seed": "npx sequelize-cli db:seed:all"
+    "db:seed": "npx sequelize-cli db:seed:all",
+    "reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && node ./models/index.js && npx sequelize-cli db:seed:all && node server.js"
   },
   "author": "",
   "license": "ISC",

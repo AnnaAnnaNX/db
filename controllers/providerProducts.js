@@ -86,11 +86,11 @@ const addProviderProducts = async (req, res) => {
                     idMainProduct: el && el.dataValues && el.dataValues.id
                 });
             });
-            console.log('newRows');
-            console.log(newRows);
+            // console.log('newRows');
+            // console.log(newRows);
             const result = await ProvidersProducts.bulkCreate(newRows);
-            console.log('result');
-            console.log(result);
+            // console.log('result');
+            // console.log(result);
         } else {
             const result = await ProvidersProducts.bulkCreate(rows, {
                 updateOnDuplicate: [
@@ -108,8 +108,8 @@ const addProviderProducts = async (req, res) => {
             //     ],
             //     updateOnDuplicate: ['id'] 
             // });
-            console.log('result');
-            console.log(result);
+            // console.log('result');
+            // console.log(result);
         }
 
         res.json({

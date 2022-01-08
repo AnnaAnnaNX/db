@@ -23,5 +23,17 @@ app.use('/api', routes);
 app.get('/', function(req, res) {
     res.sendFile(path.join(public, 'index.html'));
 });
+app.get('/providers', function(req, res) {
+    res.sendFile(path.join(public, 'index.html'));
+});
+app.get('/AddAllProducts', function(req, res) {
+    res.sendFile(path.join(public, 'index.html'));
+});
+app.get('/Binding', function(req, res) {
+    res.sendFile(path.join(public, 'index.html'));
+});
+app.get('/feeds', function(req, res) {
+    res.sendFile(path.join(public, 'index.html'));
+});
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
