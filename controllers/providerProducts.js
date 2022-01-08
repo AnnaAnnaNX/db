@@ -29,7 +29,7 @@ const readProviderFile = async (req, res) => {
 
 const addProviderProducts = async (req, res) => {
     try {
-        const rows = req && req.body && req.body.rows;
+        let rows = req && req.body && req.body.rows;
         console.log(req.body);
         if (!rows) {
             throw new Error('empty content');
@@ -61,7 +61,7 @@ const addProviderProducts = async (req, res) => {
         console.log(providerName);
 
         let updateCount = 0;
-        rows.map((el) => {            
+        rows = rows.map((el) => {            
             if (providerName === 'markup') {
                 el.idMainProduct = parseInt(el.idProductProvider, 10);
             }
@@ -92,10 +92,27 @@ const addProviderProducts = async (req, res) => {
             console.log('result');
             console.log(result);
         } else {
-            await ProvidersProducts.bulkCreate(rows);
+            const result = await ProvidersProducts.bulkCreate(rows, {
+                updateOnDuplicate: [
+                    'id',
+                    // 'idProductProvider',
+                    'values',
+                    'updatedAt'
+                ]
+            });
+            // const result = await ProvidersProducts.bulkCreate(rows, {
+            //     fields:[
+            //         'id',
+            //         'idProductProvider',
+            //         'values'
+            //     ],
+            //     updateOnDuplicate: ['id'] 
+            // });
+            console.log('result');
+            console.log(result);
         }
 
-        res.json( {
+        res.json({
             created: rows.length - updateCount,
             updated: updateCount
         });
