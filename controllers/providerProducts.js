@@ -220,7 +220,7 @@ const getAssort = async () => {
                 obj[idAssort]['YMId'] = el.idProductProvider;
                 const fieldsNames = nameProviderIdProviderObj['YM'].fieldsNames;
                 // let n = fieldsNames.indexOf('categoryInOurShope');
-                let n = fieldsNames.indexOf('name');
+                let n = fieldsNames.indexOf('categoryInOurShope');
                 let values = el.values && JSON.parse(el.values);
                 obj[idAssort]['categoryInOurShope'] = values && values[n];
                 
