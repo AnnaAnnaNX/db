@@ -211,75 +211,77 @@ const getAssort = async () => {
           });
           providerProducts.forEach((el) => {
             if (el.idMainProduct) {
+                const idAssort = el.idMainProduct;
               // obj[idMainProduct][`count #${el.idProvider}`] = el.count;
               
               if (nameProviderIdProviderObj['YM'] &&
-                (el.idProvider === nameProviderIdProviderObj['YM'].id)) {
-                obj[el.idMainProduct]['YMId'] = el.idProductProvider;
+                // (el.idProvider === nameProviderIdProviderObj['YM'].id)
+                (idProviderNameProviderObj[el.idProvider] === 'YM')) {
+                obj[idAssort]['YMId'] = el.idProductProvider;
                 const fieldsNames = nameProviderIdProviderObj['YM'].fieldsNames;
-                let n = fieldsNames.indexOf('categoryInOurShope');
+                // let n = fieldsNames.indexOf('categoryInOurShope');
+                let n = fieldsNames.indexOf('name');
                 let values = el.values && JSON.parse(el.values);
-                obj[el.idMainProduct]['categoryInOurShope'] = values && values[n];
+                obj[idAssort]['categoryInOurShope'] = values && values[n];
                 
                 n = fieldsNames.indexOf('name');
-                values = el.values && JSON.parse(el.values);
-                obj[el.idMainProduct]['YMName'] = values && values[n];
+                // values = el.values && JSON.parse(el.values);
+                obj[idAssort]['YMName'] = values && values[n];
                 
                 n = fieldsNames.indexOf('linkOnImage');
-                values = el.values && JSON.parse(el.values);
-                obj[el.idMainProduct]['linkOnImage'] = values && values[n];
+                // values = el.values && JSON.parse(el.values);
+                obj[idAssort]['linkOnImage'] = values && values[n];
               } else
               if (nameProviderIdProviderObj['Ozon'] &&
-                (el.idProvider === nameProviderIdProviderObj['Ozon'].id)) {
-                obj[el.idMainProduct]['OzonId'] = el.idProductProvider;
+                // (el.idProvider === nameProviderIdProviderObj['Ozon'].id)
+                (idProviderNameProviderObj[el.idProvider] === 'Ozon')) {
+                obj[idAssort]['OzonId'] = el.idProductProvider;
                 const fieldsNames = nameProviderIdProviderObj['Ozon'].fieldsNames;
                 const n = fieldsNames.indexOf('name');
                 const values = el.values && JSON.parse(el.values); 
-                obj[el.idMainProduct]['OzonName'] = values && values[n];
+                obj[idAssort]['OzonName'] = values && values[n];
               } else
               if (nameProviderIdProviderObj['1C'] &&
-                (el.idProvider === nameProviderIdProviderObj['1C'].id)) {
-                obj[el.idMainProduct]['1CId'] = el.idProductProvider;
+                // (el.idProvider === nameProviderIdProviderObj['1C'].id)
+                (idProviderNameProviderObj[el.idProvider] === '1C')) {
+                obj[idAssort]['1CId'] = el.idProductProvider;
                 const values = el.values && JSON.parse(el.values); 
                 const fieldsNames = nameProviderIdProviderObj['1C'].fieldsNames;
                 let n = fieldsNames.indexOf('name');
-                obj[el.idMainProduct]['1CName'] = values && values[n];
+                obj[idAssort]['1CName'] = values && values[n];
                 n = fieldsNames.indexOf('price');
-                obj[el.idMainProduct]['1CPrice'] = values && values[n];
-                obj[el.idMainProduct]['1CUpdate'] = el.updatedAt;
+                obj[idAssort]['1CPrice'] = values && values[n];
+                obj[idAssort]['1CUpdate'] = el.updatedAt;
               } else    
               if (nameProviderIdProviderObj['markup'] &&
-                (el.idProvider === nameProviderIdProviderObj['markup'].id)) {
-                obj[el.idMainProduct]['markupId'] = el.idProductProvider;
+                // (el.idProvider === nameProviderIdProviderObj['markup'].id)
+                (idProviderNameProviderObj[el.idProvider] === 'markup')) {
+                obj[idAssort]['markupId'] = el.idProductProvider;
                 const values = el.values && JSON.parse(el.values);
                 const fieldsNames = nameProviderIdProviderObj['markup'].fieldsNames;
                 let n = fieldsNames.indexOf('markup');
-                obj[el.idMainProduct]['markup'] = values && values[n];
+                obj[idAssort]['markup'] = values && values[n];
               } else
               // здесь только поставщики (берем любого поставщика)
-              if (!obj[el.idMainProduct]['providerName']) {            
-                console.log('el.idProvider');
-                console.log(el.idProvider);
+              if (!obj[idAssort]['providerName']) {
                 const providerName = idProviderNameProviderObj[el.idProvider];
-                console.log('providerName');
-                console.log(providerName);
-                obj[el.idMainProduct]['providerName'] = providerName;
+                obj[idAssort]['providerName'] = providerName;
                 const fieldsNames = nameProviderIdProviderObj[providerName]
-                && nameProviderIdProviderObj[providerName].fieldsNames;
+                    && nameProviderIdProviderObj[providerName].fieldsNames;
                 let n = fieldsNames && fieldsNames.indexOf('name');
                 const values = el.values && JSON.parse(el.values); 
-                obj[el.idMainProduct]['providerProductName'] = values && values[n];
+                obj[idAssort]['providerProductName'] = values && values[n];
                 n = fieldsNames && fieldsNames.indexOf('price');
-                obj[el.idMainProduct]['providerProductprice'] = values && values[n];
-                obj[el.idMainProduct]['providerProductUpdate'] = el.updatedAt;
+                obj[idAssort]['providerProductPrice'] = values && values[n];
+                obj[idAssort]['providerProductUpdate'] = el.updatedAt;
               }
               // newPrice
-              if (obj[el.idMainProduct]['providerProductprice']
-                && obj[el.idMainProduct]['1CPrice']) {
-                  const dataProvider = obj[el.idMainProduct]['providerProductUpdate']
-                    &&  moment(obj[el.idMainProduct]['providerProductUpdate']);
-                  const data1C = obj[el.idMainProduct]['1CUpdate']
-                    &&  moment(obj[el.idMainProduct]['1CUpdate']);
+              if (obj[idAssort]['providerProductPrice']
+                && obj[idAssort]['1CPrice']) {
+                  const dataProvider = obj[idAssort]['providerProductUpdate']
+                    &&  moment(obj[idAssort]['providerProductUpdate']);
+                  const data1C = obj[idAssort]['1CUpdate']
+                    &&  moment(obj[idAssort]['1CUpdate']);
                   console.log('dataProvider');
                   console.log(dataProvider);
                   console.log('data1C');
@@ -287,15 +289,20 @@ const getAssort = async () => {
               }
     
               // берет цену поставщика или если ее нет, то цену 1С
-              if (obj[el.idMainProduct]['markup']
-                || obj[el.idMainProduct]['providerProductprice']
-                || obj[el.idMainProduct]['1CPrice']) {
-                  const val = obj[el.idMainProduct]['markup'] * (obj[el.idMainProduct]['providerProductprice']
-                || obj[el.idMainProduct]['1CPrice']);
-                if (val) {
-                  obj[el.idMainProduct]['newPrice'] = Math.round(val);
-                }
-              }   
+              if (obj[idAssort]['markup']
+                && (obj[idAssort]['providerProductPrice']
+                || obj[idAssort]['1CPrice'])) {
+                    let val = 0;
+                    if (obj[idAssort]['providerProductPrice']
+                        && obj[idAssort]['1CPrice']) {
+                        val = obj[idAssort]['markup'] * (dataProvider > data1C ? obj[idAssort]['providerProductPrice'] : obj[idAssort]['1CPrice']);
+                    } else {
+                        val = obj[idAssort]['markup'] * (obj[idAssort]['providerProductPrice'] ? obj[idAssort]['providerProductPrice'] : obj[idAssort]['1CPrice'])
+                    }
+                    if (val) {
+                        obj[idAssort]['newPrice'] = Math.round(val);
+                    }
+                }   
     
             }
           });
@@ -315,7 +322,7 @@ const getAssort = async () => {
             'markup',
             'providerName',
             'providerProductName',
-            'providerProductprice',
+            'providerProductPrice',
             // 'providerProductUpdate',
             'newPrice'
           ];

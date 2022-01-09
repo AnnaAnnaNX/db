@@ -29,7 +29,7 @@ const writeRowsInExcel = async (req, res) => {
         const worksheet = workbook.addWorksheet('Ассортимент');
         const filePath = path.join(__dirname, '../files/result (44).xlsx');
 
-        const headersArr = headers.map(el => (el.value));
+        const headersArr = headers.map(el => (el.value ? el.value : el));
         const rowsArr = rows.map(row => {
             const arr = [];
             headersArr.forEach((header) => {
