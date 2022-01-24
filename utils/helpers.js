@@ -1,5 +1,6 @@
 const path = require('path');
 const ExcelJS = require('exceljs');
+const moment = require('moment');
 const { typeFilesWithFields } = require('./consts.json');
 const { json2xml } = require('./json2xml');
 const { Providers } = require('../models');
@@ -176,19 +177,38 @@ const addCategoryId = (products) => {
 
 const createUmlYml = async (content) => {
     let offer = {offer: []};
-    const obj = {yml_catalog: {offers: offer}};
-    obj.yml_catalog["@date"] = (new Date()).toISOString();
+    const obj = {yml_catalog: {shop: {offers: offer}}};
+    obj.yml_catalog["@date"] = moment().format('YYYY-MM-DD HH:mm')
 
     // header
-    obj.yml_catalog.name = 'BestSeller';
-    obj.yml_catalog.company = 'Tne Best inc.';
-    obj.yml_catalog.url = 'http://best.seller.ru';
-    obj.yml_catalog.currencies = {
-        currency: {
-            "@id": "RUR",
-            "@rate": "1"
-        }
+    obj.yml_catalog.shop.name = 'Артемида';
+    obj.yml_catalog.shop.company = 'Артемида';
+    obj.yml_catalog.shop.url = 'https://rostov-na-donu.regmarkets.ru/lyustry-artemida';
+    obj.yml_catalog.shop.currencies = {
+        currency: [
+            {
+                "@id": "RUR",
+                "@rate": "1"
+            },
+            {
+                "@id": "USD",
+                "@rate": "CBRF"
+            },
+            {
+                "@id": "EUR",
+                "@rate": "CBRF"
+            }
+        ]
     };
+    
+    obj.yml_catalog.shop['delivery-options'] = {
+        option: [
+            {
+                "@cost": "1",
+                "@days": "1"
+            }
+        ]
+    }
 
     const { categories, contentWithCategoryId } = addCategoryId(content);
     // console.log(JSON.stringify(contentWithCategoryId, null, 2));
@@ -199,18 +219,35 @@ const createUmlYml = async (content) => {
             "#text": category
         };
     })
-    obj.yml_catalog.categories = {
-        category: categoryArr
+    // obj.yml_catalog.shop.categories = {
+    //     category: categoryArr
+    // }
+    
+    obj.yml_catalog.shop.categories = {
+        category: [
+            {
+                "@id": 30,
+                "#text": "Светильники"
+            }
+        ]
+    }
+
+    obj.yml_catalog.shop.promos = {
+        "#text": ""
     }
     
     offer.offer = contentWithCategoryId.map((product) => {
         const obj = {};
         obj["@id"] = product.YMId;
+        obj["@available"] = true;
+        obj["@bid"] = "10";
         obj.name = product.YMName;
         obj.picture = product.linkOnImage || '';
         obj.price = product.newPrice;
         obj.currencyId = 'RUR';
-        obj.categoryId = product.categoryId;
+        // obj.categoryId = product.categoryId;
+        obj.categoryId = 30;        
+        obj.delivery = 1;
         // obj.count = (product.quantityGoodsAtOurStore + product.quantityGoodsAtSupplier) || 0;
         return obj;
     });
