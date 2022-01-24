@@ -41,5 +41,6 @@ router.get('/getAssort', async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 });
+router.post('/changeMarkup', providerProductsController.changeMarkup);
 
 module.exports = router;

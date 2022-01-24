@@ -336,10 +336,48 @@ const getAssort = async () => {
     }
 }
 
+const changeMarkup = async (req, res) => {
+    try {
+        const {
+            markupId,
+            markup
+        } = req.body;
+        if (!markupId
+            || !markup) {
+                console.log('Empty params');
+                throw new Error();
+            }
+        const productProviderFOrUpdate = await ProvidersProducts.findOne({
+            where: {
+                idProvider: 4,
+                idProductProvider: markupId
+            }
+        })
+        const values = productProviderFOrUpdate && productProviderFOrUpdate.values;
+        const parseArrValues = JSON.parse(values);
+        const newValues = JSON.stringify([
+            ...parseArrValues.slice(0, 2),
+            markup]);
+
+        const result = await ProvidersProducts.update({
+            values: newValues
+        }, {
+            where: {
+                idProvider: 4,
+                idProductProvider: markupId
+            }
+        });
+        res.status(200).json(result);
+    } catch (e) {
+        return res.status(500).json({ error: e.message });
+    }
+}
+
 module.exports = {
     readProviderFile,
     addProviderProducts,
     getProviderProducts,
     addLink,
-    getAssort
+    getAssort,
+    changeMarkup
 }
